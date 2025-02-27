@@ -1,0 +1,112 @@
+﻿/* Can't seem to get blazor to recognize and use this file. 
+    Will have to look into this later.
+*/
+
+
+/* Moving this to a CSS file causes it to not work, haven't discovered why yet */
+.left-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.gray-button {
+    background-color: lightgray !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    transition: transform 0.1s ease, background-color 0.3s ease !important;
+}
+
+    .gray-button:hover {
+        background-color: gray !important;
+    }
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 1rem;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+}
+
+.right-section {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 1rem;
+}
+
+.dropdown label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.dropdown select {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+
+
+.button:active {
+    transform: translateY(2px);
+}
+
+.chart-area, .grid-area {
+    flex: 1;
+    margin-bottom: 1rem;
+    background-color: #eef;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+.vertical-align {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.custom-chart .mud-chart-line-0 {
+    stroke: navy !important;
+}
+
+.custom-chart .mud-chart-line-1 {
+    stroke: teal !important;
+}
+
+.custom-chart .mud-chart-line-2 {
+    stroke: yellow !important;
+}
+
+.custom-chart .mud-chart-line-3 {
+    stroke: orange !important;
+}
+
+.custom-chart .mud-chart-line-4 {
+    stroke: red !important;
+}
+
+.custom-chart .mud-chart-line-5 {
+    stroke: purple !important;
+}
+
+.custom-chart .mud-chart-line-6 {
+    stroke: green !important;
+}
+
+.custom-chart .mud-chart-line-7 {
+    stroke: pink !important;
+}
+

@@ -1,0 +1,511 @@
+﻿@page "/"
+@using FiremapHelper
+@using Microsoft.AspNetCore.Components;
+@using System.Text.Json;
+@using System.Diagnostics;
+@using System.Text;
+@using System;
+@using System.Text.Json.Serialization;
+@using BlazorBootstrap;
+@using static System.Runtime.InteropServices.JavaScript.JSType;
+@using ChartOptions = BlazorBootstrap.ChartOptions;
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<link rel="stylesheet" href="\Home.razor.css" />
+
+<h1 style="text-align: center;">Fuel Model Comparison Tool</h1>
+
+<!--Blazor.Bootstrap & MudBlazor (extension packs needed) -->
+<!-- TODO: Replace Bootstrap grid with MudBlazor version -->
+
+<div class="top-area" style="display: flex; gap: 2rem; align-items: flex-start;">
+
+    <!-- Load the graph once selections are made -->
+    <div>
+        <MudButton Name="btnLoadData" OnClick="btnLoadData_OnClick" Class="gray-button">Generate Graph</MudButton>
+    </div>
+
+    <div>
+        <MudButton OnClick="GenerateBoxes" Class="gray-button">AutoFill</MudButton>
+    </div>
+
+    <div class="vertical-align">
+        <label for="dropDownComparer">Fire Behavior</label>
+        <select id="dropDownComparer" @bind="selectedComparer" @bind:event="oninput" @onchange="OnModelsChanged">
+            <option value="">Select a comparer</option>
+            @if (options != null)
+            {
+                @foreach (var option in options)
+                {
+                    <option value="@option.Value">@option.Text</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="vertical-align">
+        <label for="selectedTreeCover">Tree Cover</label>
+        <select id="selectedTreeCover" @bind="selectedTreeCover" @bind:event="oninput" @onchange="OnModelsChanged">
+            <option value="">Select a tree cover</option>
+            @if (treeCovers != null)
+            {
+                @foreach (var treeCover in treeCovers)
+                {
+                    <option value="@treeCover.Value">@treeCover.Text</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="vertical-align">
+        <label for="selectedHumidity">Fuel Moisture</label>
+        <select id="selectedHumidity" @bind="selectedHumidity" @bind:event="oninput" @onchange="OnModelsChanged">
+            <option value="">Select a fuel moistures</option>
+            @if (humidities != null)
+            {
+                @foreach (var humidity in humidities)
+                {
+                    <option value="@humidity.Value">@humidity.Text</option>
+                }
+            }
+        </select>
+    </div>
+
+
+
+</div>
+
+<!--table and graph-->
+<div class="container">
+    <div class="content">
+        <div class="main-layout">
+            <div class="left-section">
+                <div class="chart-area">
+                   @*  <MudBlazor.MudChart ChartType="MudBlazor.ChartType.Line" LegendPosition="MudBlazor.Position.Right" ChartSeries="@Series" @bind-SelectedIndex="chartIndex" XAxisLabels="@XAxisLabels" Width="100%" Height="100%" ChartOptions="@ChtOptions" Class="custom-chart" />
+                 
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudText Typo="Typo.body1" Class="py-3">Selected: @(chartIndex < 0 ? "None" : Series[chartIndex].Name)</MudText>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <!-- <MudSlider @bind-Value="ChtOptions.LineStrokeWidth" Min="1" Max="10" Color="Color.Info">Line Width: @ChtOptions.LineStrokeWidth.ToString()</MudSlider> -->
+                        </MudItem>
+                    </MudGrid> *@
+
+                    <MudBlazor.MudChart ChartType="MudBlazor.ChartType.Line" LegendPosition="MudBlazor.Position.Bottom" ChartSeries="@Series" @bind-SelectedIndex="chartIndex" XAxisLabels="@XAxisLabels" Width="100%" Height="100%" ChartOptions="@ChtOptions" Class="custom-chart" />
+
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudText Typo="Typo.body1" Class="py-3">Selected: @(chartIndex < 0 ? "None" : Series[chartIndex].Name)</MudText>
+                        </MudItem>
+                        <MudItem xs="6">
+@*                             <MudSlider @bind-Value="YAxisTickInterval" Min="1" Max="50" Color="Color.Info">Y-Axis Interval: @YAxisTickInterval</MudSlider>
+ *@                        </MudItem>
+                    </MudGrid>
+
+                </div>
+
+                <!-- Fuel Models dropdowns -->
+                <div class="fuel-models" style="width: 15%; display: flex; flex-direction: column;">
+                    <label for="fuel-models">Select fuel models</label>
+                    <select id="selectedFuelModels1" @bind="selectedFuelModels1" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels2" @bind="selectedFuelModels2" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels3" @bind="selectedFuelModels3" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels4" @bind="selectedFuelModels4" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels5" @bind="selectedFuelModels5" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels6" @bind="selectedFuelModels6" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels7" @bind="selectedFuelModels7" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <select id="selectedFuelModels8" @bind="selectedFuelModels8" @bind:event="oninput" @onchange="OnModelsChanged">
+                        <option value="">Select a fuel model</option>
+                        @if (models != null)
+                        {
+                            @foreach (var model in models)
+                            {
+                                <option value="@model.Value">@model.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <!-- Display Grid -->
+            <div class="grid-area" style="overflow-y: auto; max-height: 400px;">
+                <Grid TItem="FiremapData"
+                      Class="table table-hover table-bordered"
+                      DataProvider="FiremapDataProvider"
+                      AllowSelection="false"
+                      Responsive="true"
+                      @key="ShouldRefresh">
+                    <!-- Add @key to force the Grid to rebind when the flag changes -->
+
+                    <GridColumns>
+                        <GridColumn TItem="FiremapData" HeaderText="Iteration" PropertyName="Iteration">
+                            @context.Iteration
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="ROS" PropertyName="ROS">
+                            @context.ROS
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="FL" PropertyName="FL">
+                            @context.FL
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="FLIN" PropertyName="FLIN">
+                            @context.FLIN
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="HPA" PropertyName="HPA">
+                            @context.HPA
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="WAF" PropertyName="WAF">
+                            @context.WAF
+                        </GridColumn>
+
+                        <GridColumn TItem="FiremapData" HeaderText="Model Number" PropertyName="ModelNumber">
+                            @context.ModelNumber
+                        </GridColumn>
+                    </GridColumns>
+                </Grid>
+			</div>
+            
+            <div class="Footer">
+				<!--Logos\NNU_Logo.png-->
+				<img src="/Logos/NNU_Logo.png" alt="NNU Logo" class="footer-logo" />
+
+				<img src="/Logos/NWCG_Logo.png" alt="NWCG Logo" class="footer-logo" />
+
+				<img src="/Logos/RDA300.png" alt="Wild Land Fire Management Logo" class="footer-logo" />
+
+				<img src="/Logos/UofI_Logo.png" alt="UofI Logo" class="footer-logo" />
+			</div>
+        </div>
+	</div>
+    
+   
+</div>
+
+
+
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: 1rem;
+    }
+
+    .Footer {
+        display: flex;
+		flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+        position: relative; /*follows the grid naturally */
+    }
+
+    .footer-logo {
+		padding: 1rem;
+        max-width: 25%; 
+        height: auto;
+    }
+
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .left-section {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .gray-button {
+        background-color: lightgray !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        transition: transform 0.1s ease, background-color 0.3s ease !important;
+    }
+
+        .gray-button:hover {
+            background-color: gray !important;
+        }
+
+    .right-section {
+        width: 15%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-left: 1rem;
+    }
+
+    .dropdown label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .dropdown select {
+        width: 100%;
+        padding: 0.5rem;
+    }
+
+    .button:active {
+        transform: translateY(2px);
+    }
+
+    .chart-area, .grid-area {
+        flex: 1;
+        margin-bottom: 1rem;
+        background-color: #eef;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+    }
+
+    .vertical-align {
+        display: flex;
+        flex-direction: column;
+    }
+   
+    .custom-chart .mud-chart-line-0 {
+        stroke: navy !important;
+    }
+
+    .custom-chart .mud-chart-line-1 {
+        stroke: teal !important;
+    }
+
+    .custom-chart .mud-chart-line-2 {
+        stroke: yellow !important;
+    }
+
+    .custom-chart .mud-chart-line-3 {
+        stroke: orange !important;
+    }
+
+    .custom-chart .mud-chart-line-4 {
+        stroke: red !important;
+    }
+
+    .custom-chart .mud-chart-line-5 {
+        stroke: purple !important;
+    }
+
+    .custom-chart .mud-chart-line-6 {
+        stroke: green !important;
+    }
+
+    .custom-chart .mud-chart-line-7 {
+        stroke: pink !important;
+    }
+</style>
+
+@* 
+<style>
+    /* Moving this to a CSS file causes it to not work, haven't discovered why yet */
+    .left-section {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .gray-button {
+        background-color: lightgray !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        transition: transform 0.1s ease, background-color 0.3s ease !important;
+    }
+
+        .gray-button:hover {
+            background-color: gray !important;
+        }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: 1rem;
+    }
+
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .right-section {
+        width: 15%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-left: 1rem;
+    }
+
+    .dropdown label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .dropdown select {
+        width: 100%;
+        padding: 0.5rem;
+    }
+
+
+
+    .button:active {
+        transform: translateY(2px);
+    }
+
+    .chart-area, .grid-area {
+        flex: 1;
+        margin-bottom: 1rem;
+        background-color: #eef;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+    }
+
+    .vertical-align {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .Footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        
+    }
+
+    .footer-logo {
+        width: 25%;
+    }
+ 
+    .custom-chart .mud-chart-line-0 {
+        stroke: navy !important;
+    }
+
+    .custom-chart .mud-chart-line-1 {
+        stroke: teal !important;
+    }
+
+    .custom-chart .mud-chart-line-2 {
+        stroke: yellow !important;
+    }
+
+    .custom-chart .mud-chart-line-3 {
+        stroke: orange !important;
+    }
+
+    .custom-chart .mud-chart-line-4 {
+        stroke: red !important;
+    }
+
+    .custom-chart .mud-chart-line-5 {
+        stroke: purple !important;
+    }
+
+    .custom-chart .mud-chart-line-6 {
+        stroke: green !important;
+    }
+
+    .custom-chart .mud-chart-line-7 {
+        stroke: pink !important;
+    }
+</style> *@

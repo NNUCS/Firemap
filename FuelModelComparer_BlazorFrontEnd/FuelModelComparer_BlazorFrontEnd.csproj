@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Logos\NNU_Logo.png" />
+    <None Include="wwwroot\Logos\NWCG_Logo.png" />
+    <None Include="wwwroot\Logos\RDA300.png" />
+    <None Include="wwwroot\Logos\UofI_Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazor.Bootstrap" Version="3.2.0" />
+    <PackageReference Include="MudBlazor" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FiremapHelper\FiremapHelper.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="1/23/2025 9:47:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DUNGEONCOMP"
+  DTS:CreatorName="DUNGEONCOMP\sbjal"
+  DTS:DTSID="{D5B70CC6-D37A-4658-8ADC-8B1183B087A0}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{B319303B-7EFE-47BA-9519-1DDE725BCDBC}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[CSDBS.sa]"
+      DTS:CreationName="SMOServer"
+      DTS:DTSID="{2DF5FA58-3E07-43ED-A43E-CCD58F6D22B6}"
+      DTS:ObjectName="CSDBS.sa">
+      <DTS:ObjectData>
+        <SMOServerConnectionManager
+          ConnectionString="SqlServerName=CSDBS;UseWindowsAuthentication=False;UserName=sa;"
+          ConnectByProxy="False">
+          <PassWord
+            Sensitive="1" xmlns="www.microsoft.com/SqlServer/Dts"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAa6IW4EqOKUq9U2jLXV7iiAAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAB+TyBDb/mQIFl4hse53DOgE+TWtqxcYzZlZyKvXa9eXAAAAAAOgAAAAAIAACAAAAAfNdKYrd/sCrsK5ANuuxRN+FW1zcYRMvEAhpwM+Lfb9jAAAACqegi92AY4SFy7dLY1qjm1Nel5HlvwAj1HZQXbSGvcvOmYr+T5xUX7C4J34nw3p1NAAAAA9i43K0PlXmMIYX2Jb8JqSeNdUpOz1YORX5Z2tXXRmnlSp4lWEEB/PW6ai1uK8Dx/4Yd4smyXeJvs1x1ECq178g</PassWord>
+        </SMOServerConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SQL8020.site4now.net.db_aab0df_firemap_admin]"
+      DTS:CreationName="SMOServer"
+      DTS:DTSID="{EB09FB77-8D94-42B7-A062-2A8DEE38C940}"
+      DTS:ObjectName="SQL8020.site4now.net.db_aab0df_firemap_admin">
+      <DTS:ObjectData>
+        <SMOServerConnectionManager
+          ConnectionString="SqlServerName=SQL8020.site4now.net;UseWindowsAuthentication=False;UserName=db_aab0df_firemap_admin;"
+          ConnectByProxy="False">
+          <PassWord
+            Sensitive="1" xmlns="www.microsoft.com/SqlServer/Dts"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAa6IW4EqOKUq9U2jLXV7iiAAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAD5E3DSS+qP9elQn6avE61XCGr5Wxi+luqhhHmwkthmfQAAAAAOgAAAAAIAACAAAABVL+MwWbzY3XLFqiHl20GNn9KPVlHEuPX7ZqCwSuD1AyAAAAAkSwd6Mmaw8y7kNn5oTm24o8UefRA2YNofQM5iYeJaY0AAAADqK+iARdKBhXc9SjxvKuybfU1m/IGHWM0wbxQeGxunLybiM0nMMYWw0/ZrIQ+TYUqvt8wqAfE2oNr/Y/av/7Wx</PassWord>
+        </SMOServerConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Transfer SQL Server Objects Task"
+      DTS:CreationName="Microsoft.TransferSqlServerObjectsTask"
+      DTS:Description="Transfer SQL Server Objects Task"
+      DTS:DTSID="{A2B61BE7-F21E-4FC5-B62C-39B70F6B7E13}"
+      DTS:ExecutableType="Microsoft.TransferSqlServerObjectsTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Transfer SQL Server Objects Task"
+      DTS:TaskContact="Transfer Objects Task; Microsoft Corporation; SQL Server 2022; (c) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <TransferSqlServerObjectsTaskData
+          SourceConnection="{EB09FB77-8D94-42B7-A062-2A8DEE38C940}"
+          DestinationConnection="{2DF5FA58-3E07-43ED-A43E-CCD58F6D22B6}"
+          SourceDatabase="db_aab0df_firemap"
+          DestinationDatabase="db_aab0df_firemap"
+          CopyAllObjects="True"
+          DropObjectsFirst="True"
+          IncludeExtendedProperties="True"
+          CopyData="True"
+          CopyIndexes="True"
+          CopyPrimaryKeys="True"
+          CopyForeignKeys="True" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="247,42"
+          Id="Package\Transfer SQL Server Objects Task"
+          TopLeft="164,129" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

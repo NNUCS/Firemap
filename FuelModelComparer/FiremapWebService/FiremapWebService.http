@@ -1,0 +1,34 @@
+@FiremapWebService_HostAddress = https://localhost:7175
+
+GET {{FiremapWebService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{FiremapWebService_HostAddress}}/GetFiremapDataOptions/
+
+###
+
+GET {{FiremapWebService_HostAddress}}/GetFuelModels
+
+###
+
+### Try CU10
+POST {{FiremapWebService_HostAddress}}/GetFiremapDataParms
+Content-Type: application/json
+
+{
+  "Humidity": 3,
+  "TreeCover": 6,
+  "Model1": "1",
+  "Model2": "3",
+  "Model3": "4",
+  "Model4": "5",
+  "Model5": "6",
+  "Model6": "7",
+  "Model7": "8",
+  "Model8": "9"
+}
+
+
+###

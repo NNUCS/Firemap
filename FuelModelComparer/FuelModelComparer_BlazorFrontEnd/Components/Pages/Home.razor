@@ -1,0 +1,315 @@
+﻿@page "/"
+@using FiremapHelper
+@using Microsoft.AspNetCore.Components;
+@using System.Text.Json;
+@using System.Diagnostics;
+@using System.Text;
+@using System;
+@using System.Text.Json.Serialization;
+@using BlazorBootstrap;
+@using MudBlazor;
+@using static System.Runtime.InteropServices.JavaScript.JSType;
+@using ChartOptions = BlazorBootstrap.ChartOptions;
+@rendermode InteractiveServer
+
+
+<PageTitle>Home</PageTitle>
+
+<h1>Fuel Model Comparer</h1>
+
+<!--Blazor.Bootstrap & MudBlazor (extension packs needed) -->
+
+<div class="top-area" style="display: flex; gap: 2rem; align-items: flex-start;">
+
+    <!-- Sample Button -->
+    <div>
+        <button @onclick="LoadingButton" >Generate Graph</button>
+    </div>
+
+    <div>
+		<button @onclick="GenerateBoxes">AutoFill</button>
+    </div>
+
+    
+
+    <select @bind="selectedComparer" name="dropDownComparer">
+        <option value="">Select a comparer</option>
+        @if (options != null)
+        {
+            @foreach (var option in options)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        }
+    </select>
+
+    <select @bind="selectedTreeCover">
+        <option value="">Select a tree cover</option>
+        @if (treeCovers != null)
+        {
+            @foreach (var treeCover in treeCovers)
+            {
+                <option value="@treeCover.Value">@treeCover.Text</option>
+            }
+        }
+    </select>
+
+    <select @bind="selectedHumidity">
+        <option value="">Select a humidity</option>
+        @if (humidities != null)
+        {
+            @foreach (var humidity in humidities)
+            {
+                <option value="@humidity.Value">@humidity.Text</option>
+            }
+        }
+    </select>
+
+    <!-- This will need to recall the function and have it refresh the data -->
+@*     <button @onclick="LoadGraph">Generate</button> *@
+
+</div>
+
+<!--table and graph-->
+<LayoutView>
+    <Layout>
+        <div class="container">
+            <div class="content">
+                <header>
+                    <h1>Display</h1>
+                </header>
+                <div class="main-layout">
+
+                    
+                    <div class="left-section">
+                        <div class="chart-area">
+                            <MudChart ChartType="MudBlazor.ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="chartIndex" XAxisLabels="@XAxisLabels" Width="100%" Height="350px" ChartOptions="@ChtOptions" />
+                            <MudGrid>
+                                <MudItem xs="6">
+                                    <MudText Typo="Typo.body1" Class="py-3">Selected: @(chartIndex < 0 ? "None" : Series[chartIndex].Name)</MudText>
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudSlider @bind-Value="ChtOptions.LineStrokeWidth" Min="1" Max="10" Color="Color.Info">Line Width: @ChtOptions.LineStrokeWidth.ToString()</MudSlider>
+                                </MudItem>
+                            </MudGrid>
+        
+						</div>
+                        
+                        <!-- Fuel Models dropdowns -->
+						<div class="fuel-models" style="width: 30%; display: flex; flex-direction: column;">
+							<label for="fuel-models">Select fuel models</label>
+							@* @for (int i = 0; i < 8; i++)
+							{
+
+                                //<select @bind="selectedFuelModels[i]" >
+                                <select @bind="selectedFuelModels">
+									<option value="">Select a fuel model</option>
+									@if (models != null)
+									{
+										@foreach (var model in models)
+										{
+											<option value="@model.Value">@model.Text</option>
+										}
+									}
+								</select>
+
+							} *@
+
+							<select @bind="selectedFuelModels1">
+								<option value="">Select a fuel model</option>
+								@if (models != null)
+								{
+									@foreach (var model in models)
+									{
+										<option value="@model.Value">@model.Text</option>
+									}
+								}
+							</select>
+
+                            <select @bind="selectedFuelModels2">
+                                <option value="">Select a fuel model</option>
+                                @if (models != null)
+                                {
+                                    @foreach (var model in models)
+                                    {
+                                        <option value="@model.Value">@model.Text</option>
+                                    }
+                                }
+                            </select>
+
+                            <select @bind="selectedFuelModels3">
+								<option value="">Select a fuel model</option>
+								@if (models != null)
+								{
+									@foreach (var model in models)
+									{
+										<option value="@model.Value">@model.Text</option>
+									}
+								}
+							</select>
+
+                            <select @bind="selectedFuelModels4">
+                                <option value="">Select a fuel model</option>
+                                @if (models != null)
+                                {
+                                    @foreach (var model in models)
+                                    {
+                                        <option value="@model.Value">@model.Text</option>
+                                    }
+                                }
+                            </select>
+
+                            <select @bind="selectedFuelModels5">
+                                <option value="">Select a fuel model</option>
+                                @if (models != null)
+                                {
+                                    @foreach (var model in models)
+                                    {
+                                        <option value="@model.Value">@model.Text</option>
+                                    }
+                                }
+                            </select>
+
+                            <select @bind="selectedFuelModels6">
+								<option value="">Select a fuel model</option>
+								@if (models != null)
+								{
+									@foreach (var model in models)
+									{
+										<option value="@model.Value">@model.Text</option>
+									}
+								}
+							</select>
+
+                            <select @bind="selectedFuelModels7">
+                                <option value="">Select a fuel model</option>
+                                @if (models != null)
+                                {
+                                    @foreach (var model in models)
+                                    {
+                                        <option value="@model.Value">@model.Text</option>
+                                    }
+                                }
+                            </select>
+
+                            <select @bind="selectedFuelModels8">
+                                <option value="">Select a fuel model</option>
+                                @if (models != null)
+                                {
+                                    @foreach (var model in models)
+                                    {
+                                        <option value="@model.Value">@model.Text</option>
+                                    }
+                                }
+                            </select>
+
+
+						</div>
+
+                    </div>
+
+					
+                    <div class="grid-area" style="overflow-y: auto; max-height: 400px;">
+                        <Grid TItem="FiremapData"
+                              Class="table table-hover table-bordered"
+                              DataProvider="FiremapDataProvider"
+                              AllowSelection="false"
+                              Responsive="true"
+                              @key="ShouldRefresh"> <!-- Add @key to force the Grid to rebind when the flag changes -->
+                        
+                            <GridColumns>
+                                <GridColumn TItem="FiremapData" HeaderText="Iteration" PropertyName="Iteration">
+                                    @context.Iteration
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="ROS" PropertyName="ROS">
+                                    @context.ROS
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="FL" PropertyName="FL">
+                                    @context.FL
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="FLIN" PropertyName="FLIN">
+                                    @context.FLIN
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="HPA" PropertyName="HPA">
+                                    @context.HPA
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="WAF" PropertyName="WAF">
+                                    @context.WAF
+                                </GridColumn>
+
+                                <GridColumn TItem="FiremapData" HeaderText="Model Number" PropertyName="ModelNumber">
+                                    @context.ModelNumber
+                                </GridColumn>
+                            </GridColumns>
+                        </Grid>
+                    </div>
+
+
+
+				</div> 
+               
+            </div>
+        </div>
+    </Layout>
+</LayoutView>
+
+@code {
+
+}
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: 1rem;
+		
+        
+    }
+
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left-section {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .chart-area, .grid-area {
+        flex: 1;
+        margin-bottom: 1rem;
+        background-color: #eef;
+        padding: 1rem;
+        border: 1px solid #ccc;
+    }
+
+    .right-section {
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-left: 1rem;
+    }
+
+    .dropdown label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .dropdown select {
+        width: 100%;
+        padding: 0.5rem;
+    }
+</style>
